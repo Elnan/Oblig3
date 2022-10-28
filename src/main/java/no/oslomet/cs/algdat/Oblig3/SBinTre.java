@@ -132,6 +132,8 @@ public class SBinTre<T> {
             if (p == rot) rot = b;
             else if (p == q.venstre) q.venstre = b;
             else q.høyre = b;
+            if (b != null) b.forelder = rot == b ? null : q;
+
         } else  // Tilfelle 3)
         {
             Node<T> s = p, r = p.høyre;   // finner neste i inorden
@@ -151,28 +153,60 @@ public class SBinTre<T> {
     }
 
     public int fjernAlle(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (verdi == null) return 0;
+
+        int resultat = 0;
+        boolean fjernet;
+
+        do {
+            fjernet = fjern(verdi);
+            if (fjernet) {
+                resultat++;
+            }
+        } while (fjernet);
+
+        return resultat;
     }
 
     public int antall(T verdi) {
-        if (verdi == null) {
-            return 0;
-        }
+
+
         int teller = 0;
-        Node<T> p = rot;
+        Node<T> p = førstePostorden(rot);
         while (p != null) {
-            int cmp = comp.compare(verdi, p.verdi);
-            if (cmp < 0) {
-                p = p.venstre;
-            } else if (cmp > 0) {
-                p = p.høyre;
-            } else teller++;
+            if (p.verdi == verdi) {
+                teller++;
+            }
+            p = nestePostorden(p);
         }
         return teller;
+
     }
 
     public void nullstill() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (rot != null) {
+            nullstill(rot);
+            antall = 0;
+            rot = null;
+        }
+
+    }
+
+    private void nullstill(Node<T> p) {
+
+        if (p.venstre != null) {
+            nullstill(p.venstre);
+
+        }
+
+        if (p.høyre != null) {
+            nullstill(p.høyre);
+        }
+
+        p.høyre = null;
+        p.venstre = null;
+        p.verdi = null;
+        p.forelder = null;
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
@@ -244,16 +278,39 @@ public class SBinTre<T> {
         }
         oppgave.utførOppgave(p.verdi);
 
-            }
-
+    }
 
 
     public ArrayList<T> serialize() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        if (rot == null) return null;
+
+        ArrayList<Node<T>> kø = new ArrayList<>();
+        kø.add(rot);
+        ArrayList<T> resultat = new ArrayList<>();
+
+        while (!kø.isEmpty()) {
+
+            Node<T> p = kø.remove(0);
+
+            resultat.add(p.verdi);
+
+            if (p.venstre != null) kø.add(p.venstre);
+            if (p.høyre != null) kø.add(p.høyre);
+
+        }
+        return resultat;
     }
 
     static <K> SBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+
+        if (data == null) return null;
+
+        SBinTre<K> resultat = new SBinTre<>(c);
+
+        for (K verdi : data) {
+            resultat.leggInn(verdi);
+        }
+        return resultat;
     }
 
     public static <T> T requireNonNull(T obj, String s) {

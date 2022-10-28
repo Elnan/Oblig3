@@ -12,6 +12,8 @@ i noden. La derfor til den.
 
 I oppgave 2 sjekkes det først om verdien er i treet, hvis ikke returneres 0. Deretter opprettes hjelpevariabelen 'teller',
 som oppdateres hver gang den innsendte verdien blir funnet.
+I metoden antall() fant jeg ut at ville bli løst mye lettere om jeg kalte på nestePostorden. Bruker derfor den til
+å traversere treet.
 
 I oppgave 3 finner vi metodene førstePostorden() og nestePostorden(). førstePostordenm() sjekker først venstre node,
 så høyre node. Om ikke de blir funnet, returneres p/roten.
@@ -24,5 +26,8 @@ Det fortsetter fram til den neste i postorden er funnet.
 I oppgave 4 brukes rekursive metoder. i postorden() kaller metoden på seg selv fram til p sin plass er funnet, dvs p ikke er null.
 I postordenRecursive traverseres treet i postorden. Så lenge det finnes noe i venstre barn, prioriteres det først, deretter høyrebarn.
 
+I Oppgave 5, i metoden serialize(), lager jeg en hjelpearray kalt kø før nodene blir lagt til i det endelige arrayet, kalt resultat.
+Bruker kø.remove for å finne og fjerne noden samtidig. 
+I deserialize() går jeg gjennom alle data i innsendte ArrayList også opprettes et SBinTre for å lagre resultatet.
 
 
